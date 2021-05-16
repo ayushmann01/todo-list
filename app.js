@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({
 
 app.set('view engine', 'ejs');
 
-let items = ['first-item',];
+let items = ['first-item', ];
 
 app.get("/", (request, response) => {
     const today = new Date();
@@ -31,13 +31,17 @@ app.get("/", (request, response) => {
 
 
 app.post("/", (request, response) => {
-    var newItem = request.body.newItem;
-    
-     if(newItem !== ""){
-        items.push(newItem);
-     }
-     
-    response.redirect("/");
+
+    if (request.body.reset === "reset-list") {
+        items = [];
+        response.redirect("/");
+    } else {
+        var newItem = request.body.newItem;
+        if (newItem !== "") {
+            items.push(newItem);
+        }
+        response.redirect("/");
+    }
 });
 
 
