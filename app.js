@@ -11,7 +11,9 @@ app.use(bodyParser.urlencoded({
 
 app.set('view engine', 'ejs');
 
-let items = ['first-item',];
+let items = ['first-item', ];
+let assignments = ['first-assignment'];
+var day;
 
 app.get("/", (request, response) => {
     const today = new Date();
@@ -21,23 +23,39 @@ app.get("/", (request, response) => {
         month: 'long'
     }
 
-    let day = today.toLocaleDateString('hi-IN', options);
+    day = today.toLocaleDateString('hi-IN', options);
 
     response.render("list", {
-        day: day,
+        listTitle: day,
         newListItems: items
     });
 });
 
 
+app.get("/assignment", (request, response) => {
+
+    assignments.push()
+
+    response.render("list", {
+        listTitle: 'Assignment List',
+        newListItems: assignments
+    });
+});
+
 app.post("/", (request, response) => {
-    var newItem = request.body.newItem;
-    
-     if(newItem !== ""){
-        items.push(newItem);
-     }
-     
-    response.redirect("/");
+
+    //console.log(request.body);
+
+    let newItem = request.body.newItem;
+    if (newItem !== "") {
+        if (request.body.list === "Assignment List") {
+            assignments.push(newItem);
+            response.redirect("/assignment");
+        } else {
+            items.push(newItem);
+            response.redirect("/");
+        }
+    }
 });
 
 

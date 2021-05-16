@@ -56,7 +56,7 @@ form {
   margin-left: 20px;
 }
 
-button {
+button[type="submit"] {
   min-height: 50px;
   width: 50px;
   border-radius: 50%;
@@ -67,6 +67,8 @@ button {
   padding-bottom: 6px;
   border-width: 0;
 }
+
+
 
 input[type="text"] {
   text-align: center;
