@@ -51,8 +51,9 @@ app.post("/", (request, response) => {
             items.push(newItem);
             response.redirect("/");
             }
+        }
 
-     }
+    }
 });
 
 
