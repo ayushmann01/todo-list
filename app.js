@@ -13,30 +13,46 @@ app.use(bodyParser.urlencoded({
 app.set('view engine', 'ejs');
 
 let items = [];
-
+let assignments = ['first-assignment'];
+  
 app.get("/", (request, response) => {
    
     let day = date.getDate();
 
     response.render("list", {
-        day: day,
+        listTitle: day,
         newListItems: items
     });
 });
 
 
+app.get("/assignment", (request, response) => {
+
+    assignments.push()
+
+    response.render("list", {
+        listTitle: 'Assignment List',
+        newListItems: assignments
+    });
+});
+
 app.post("/", (request, response) => {
 
-    if (request.body.reset === "reset-list") {
+  if (request.body.reset === "reset-list") {
         items = [];
         response.redirect("/");
     } else {
-        var newItem = request.body.newItem;
+        let newItem = request.body.newItem;
         if (newItem !== "") {
+          if (request.body.list === "Assignment List") {
+            assignments.push(newItem);
+            response.redirect("/assignment");
+          } else {
             items.push(newItem);
-        }
-        response.redirect("/");
-    }
+            response.redirect("/");
+            }
+
+     }
 });
 
 
