@@ -26,9 +26,15 @@
         <% } %>
 
         <form action="/" method="POST" class="item">
-            <input type="text" name="newItem" placeholder="new item">
+            <input type="text" name="newItem" placeholder="new item" autocomplete="off">
             <button type="submit" name="list" value="<%=listTitle%>" >+</button>
         </form>
+
+        <form action="/" method="POST">
+            <button id="reset" name="reset" value="reset-list" >Reset</button>
+        </form>
+
+
     </div>
     
 </body>

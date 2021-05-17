@@ -68,7 +68,18 @@ button[type="submit"] {
   border-width: 0;
 }
 
-
+#reset {
+  min-height: 20px;
+  width: 100px;
+  border-color: transparent;
+  border-radius: 5px;
+  background-color: #dc3545;
+  color: #fff;
+  padding: 5px;
+  font-size: 20px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
 
 input[type="text"] {
   text-align: center;
