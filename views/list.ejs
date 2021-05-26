@@ -1,25 +1,25 @@
-    <%- include('partials/header')  %> 
+    <%- include('partials/header')  %>
 
     <div class="box" id="heading">
         <h1><%=listTitle%></h1>
     </div>
 
     <div class="box">
-        <% for(var i = 0; i <newListItems.length; i++) { %>
-        <div class="item">
-            <input type="checkbox">
-            <p> <%= newListItems[i] %><p>
-        </div>
-        <% } %>
+        <%= listModel.find((err, items) => { %>
+            <div class="item">
+                <input type="checkbox">
+                <p> <%items.task%><p>
+            </div>
+        <% }); %>
 
-        <form action="/" method="POST" class="item">
-            <input type="text" name="newItem" placeholder="new item" autocomplete="off" required>
-            <button type="submit" name="list" value="<%=listTitle%>">+</button>
-        </form>
+    <form action="/" method="POST" class="item">
+        <input type="text" name="newItem" placeholder="new item" autocomplete="off" required>
+        <button type="submit" name="list" value="<%=listTitle%>">+</button>
+    </form>
 
-        <form action="/" method="POST">
-            <button id="reset" name="reset" value="reset-list">Reset</button>
-        </form>
+    <form action="/" method="POST">
+        <button id="reset" name="reset" value="reset-list">Reset</button>
+    </form>
     </div>
 
     <%- include('partials/footer')  %>

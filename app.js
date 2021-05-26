@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const date = require(__dirname+"/date.js");
+const dbCongfig = require(__dirname+"/dbConfig.js");
 
 const app = express();
 
@@ -12,16 +13,19 @@ app.use(bodyParser.urlencoded({
 
 app.set('view engine', 'ejs');
 
-let items = [];
-let assignments = ['first-assignment'];
-  
+ let items = [];
+ let assignments = ['first-assignment'];
+
+ 
 app.get("/", (request, response) => {
    
     let day = date.getDate();
 
+    // console.log(dbCongfig.Todolist);
+
     response.render("list", {
         listTitle: day,
-        newListItems: items
+        listModel: dbCongfig.Todolist
     });
 });
 
