@@ -58,13 +58,12 @@ form.item {
 
 button[type="submit"] {
   min-height: 50px;
-  width: 50px;
+  width: 12%;
   border-radius: 50%;
   border-color: transparent;
   background-color: #A683E3;
   color: #fff;
   font-size: 30px;
-  padding-bottom: 6px;
   border-width: 0;
 }
 
