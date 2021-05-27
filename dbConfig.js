@@ -33,18 +33,18 @@ exports.insertTask = (task) => {
    item.save((err) => {
      if(err) console.log("insertion failed");
      else{
-         mongoose.connection.close();
+         // mongoose.connection.close();
         console.log("successfully added");
      }      
    });
 };
 
-exports.deleteTask = (task) => {
-    Todolist.deleteOne({task: task}, (err) => {
+exports.deleteTask = (id) => {
+    Todolist.deleteOne({_id: id}, (err) => {
         if(err) console.log(err);
         else{
             console.log('successfully deleted');
-            exports.showList();
+            // exports.showList();
         }
     });
 };

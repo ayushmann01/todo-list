@@ -5,21 +5,23 @@
     </div>
 
     <div class="box">
-        <%= listModel.find((err, items) => { %>
+        <% listItems.forEach( (item) => { %>
+        <form action="delete" method="post">
             <div class="item">
-                <input type="checkbox">
-                <p> <%items.task%><p>
+                <input type="checkbox" name="checkbox" value="<%=item._id%>" onchange="this.form.submit()" >
+                <p> <%=item.task%><p>
             </div>
+        </form>
         <% }); %>
 
-    <form action="/" method="POST" class="item">
-        <input type="text" name="newItem" placeholder="new item" autocomplete="off" required>
-        <button type="submit" name="list" value="<%=listTitle%>">+</button>
-    </form>
+        <form action="/" method="POST" class="item">
+            <input type="text" name="newItem" placeholder="new item" autocomplete="off" required>
+            <button type="submit" name="list" value="<%=listTitle%>">+</button>
+        </form>
 
-    <form action="/" method="POST">
-        <button id="reset" name="reset" value="reset-list">Reset</button>
-    </form>
+        <form action="/" method="POST" class="item">
+            <button style="margin: auto;" id="reset" name="reset" value="reset-list">Reset</button>
+        </form>
     </div>
 
     <%- include('partials/footer')  %>
