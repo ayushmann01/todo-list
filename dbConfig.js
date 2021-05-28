@@ -1,15 +1,18 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-mongoose.connect(process.env.URL, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(process.env.URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
 
 const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection fail')  );
+db.on('error', console.error.bind(console, 'connection fail'));
 db.once('open', () => {
     console.log("Successfully connected");
 });
 
-const listSchema = new mongoose.Schema({
+const taskSchema = new mongoose.Schema({
     task: {
         type: String,
         required: true,
@@ -20,29 +23,85 @@ const listSchema = new mongoose.Schema({
     }
 });
 
+const listSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: true
+    },
+    tasks: {
+        type: [taskSchema],
+        required: true
+    },
+});
 
-const Todolist = new mongoose.model('todolist', listSchema);
-exports.Todolist = Todolist;
+
+const TaskList = new mongoose.model('todolist', taskSchema);
+exports.TaskList = TaskList;
+const CustomList = new mongoose.model('customList', listSchema);
+exports.CustomList = CustomList;
+
+
+const defaultItem1 = new TaskList({
+    task: "Tick to delete a task"
+});
+const defaultItem2 = new TaskList({
+    task: "Press + to add a new task"
+});
+const defaultItem3 = new TaskList({
+    task: "Press reset to delete list"
+});
+
+const defaultItems = [defaultItem1, defaultItem2, defaultItem3];
+// TaskList.insertMany(defaultItems);
 
 
 exports.insertTask = (task) => {
-   const item = new Todolist({
-       task: task
-   });
-   
-   item.save((err) => {
-     if(err) console.log("insertion failed");
-     else{
-         // mongoose.connection.close();
-        console.log("successfully added");
-     }      
-   });
+    const item = new TaskList({
+        task: task
+    });
+
+    item.save((err) => {
+        if (err) console.log("insertion failed");
+        else {
+            // mongoose.connection.close();
+            console.log("successfully added");
+        }
+    });
+};
+
+exports.newCustomList = (listName) => {
+    const item = new CustomList({
+        title: listName,
+        tasks: defaultItems
+    });
+
+    item.save((err) => {
+        if (err) console.log(err);
+        else console.log("new custom list created");
+    });
+};
+
+
+exports.insertCustomList = (task, listName) => {
+    const item = new CustomList({
+        title: listName,
+        tasks: new TaskList({
+            task: task
+        }),
+    });
+
+    item.save((err) => {
+        if (err) console.log(err);
+        else console.log("Successfully added");
+    });
 };
 
 exports.deleteTask = (id) => {
-    Todolist.deleteOne({_id: id}, (err) => {
-        if(err) console.log(err);
-        else{
+    TaskList.deleteOne({
+        _id: id
+    }, (err) => {
+        if (err) console.log(err);
+        else {
             console.log('successfully deleted');
             // exports.showList();
         }
@@ -50,8 +109,8 @@ exports.deleteTask = (id) => {
 };
 
 exports.showList = () => {
-    Todolist.find( (err, items) => {
-        if(err) console.error(err);
+    TaskList.find((err, items) => {
+        if (err) console.error(err);
         else {
             mongoose.connection.close();
             console.log(items);
@@ -64,4 +123,6 @@ exports.showList = () => {
 
 // exports.showList();
 
-//exports.insertTask('test');
+// exports.insertTask('test');
+
+// exports.insertCustomList("task1", 'demo');

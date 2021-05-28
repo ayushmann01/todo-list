@@ -1,5 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const {
+    request,
+    response
+} = require("express");
 const date = require(__dirname + "/date.js");
 const dbCongfig = require(__dirname + "/dbConfig.js");
 
@@ -19,12 +23,32 @@ app.get("/", (request, response) => {
 
     let day = date.getDate();
 
-    // console.log(dbCongfig.Todolist);
-    dbCongfig.Todolist.find({}, (err, items) => {
+    // console.log(dbCongfig.TodoList);
+    dbCongfig.TaskList.find({}, (err, items) => {
         response.render("list", {
             listTitle: day,
             listItems: items
         });
+    });
+});
+
+app.get("/custom/:customList", (request, response) => {
+
+    // console.log(request.params.customList);
+    const customListName = request.params.customList;
+    dbCongfig.CustomList.findOne({
+        title: customListName
+    }, (err, list) => {
+        if (!err) {
+            if (!list) {
+                dbCongfig.newCustomList(customListName);
+            } else {
+                response.render('list', {
+                    listTitle: customListName,
+                    listItems: list.tasks
+                });
+            }
+        }
     });
 });
 
@@ -40,8 +64,8 @@ app.get("/assignment", (request, response) => {
 
 app.post("/", (request, response) => {
     if (request.body.reset === "reset-list") {
-        console.log("delete items");
-        // response.redirect("/");
+        // console.log("delete items");
+        response.redirect("/");
     }
     let newItem = request.body.newItem;
     if (request.body.list === "Assignment List") {
