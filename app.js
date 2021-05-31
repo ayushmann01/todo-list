@@ -1,9 +1,5 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const {
-    request,
-    response
-} = require("express");
 const date = require(__dirname + "/date.js");
 const dbCongfig = require(__dirname + "/dbConfig.js");
 
@@ -17,8 +13,6 @@ app.use(bodyParser.urlencoded({
 
 app.set('view engine', 'ejs');
 
-const assignments = [];
-
 app.get("/", (request, response) => {
 
     let day = date.getDate();
@@ -26,7 +20,7 @@ app.get("/", (request, response) => {
     // console.log(dbCongfig.TodoList);
     dbCongfig.TaskList.find({}, (err, items) => {
         response.render("list", {
-            listTitle: day,
+            listTitle: "Today",
             listItems: items
         });
     });
@@ -52,36 +46,35 @@ app.get("/custom/:customList", (request, response) => {
     });
 });
 
-app.get("/assignment", (request, response) => {
-
-    assignments.push()
-
-    response.render("list", {
-        listTitle: 'Assignment List',
-        listItems: assignments
-    });
-});
-
 app.post("/", (request, response) => {
     if (request.body.reset === "reset-list") {
         // console.log("delete items");
         response.redirect("/");
     }
     let newItem = request.body.newItem;
-    if (request.body.list === "Assignment List") {
-        assignments.push(newItem);
-        response.redirect("/assignment");
-    } else {
+    let list = request.body.list.toLowerCase();
+    if (list === "today") {
         dbCongfig.insertTask(newItem);
+        response.redirect("/");
+    }else {
+        dbCongfig.insertCustomList(newItem, list);
+        response.redirect("/custom/"+ list);
     }
-    response.redirect("/");
 });
 
 app.post("/delete", (request, response) => {
     const checkedId = request.body.checkbox;
-
-    dbCongfig.deleteTask(checkedId);
-    response.redirect("/");
+    const listName = request.body.listName.toLowerCase();
+     console.log(listName);
+    if(listName === "today")
+    { 
+        dbCongfig.deleteTask(checkedId);
+        response.redirect("/");
+    } else {
+        dbCongfig.deleteCustomList(checkedId, listName);
+        response.redirect("/custom/"+ listName);
+    }
+     
 });
 
 app.listen(process.env.PORT || 3000, () => {

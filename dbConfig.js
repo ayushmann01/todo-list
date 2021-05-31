@@ -83,17 +83,32 @@ exports.newCustomList = (listName) => {
 
 
 exports.insertCustomList = (task, listName) => {
-    const item = new CustomList({
-        title: listName,
-        tasks: new TaskList({
+    CustomList.findOne({
+        title: listName
+    }, (err, foundList) => {
+        const item = new TaskList({
             task: task
-        }),
-    });
+        });
 
-    item.save((err) => {
-        if (err) console.log(err);
-        else console.log("Successfully added");
+        foundList.tasks.push(item);
+        foundList.save((err) => {
+            if (err) console.log(err);
+            else console.log("Successfully added");
+        });
     });
+};
+
+exports.deleteCustomList= (id, listName) => {
+   CustomList.findOneAndUpdate({title: listName},
+        {
+            $pull: {
+            tasks: {_id: id}
+            } 
+       },
+        (err, foundList) => {
+           if(err) console.log(err);
+           else console.log("Successfully deleted from"+ foundList); 
+       });
 };
 
 exports.deleteTask = (id) => {
